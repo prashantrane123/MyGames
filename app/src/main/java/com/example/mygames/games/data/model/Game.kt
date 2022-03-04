@@ -1,9 +1,9 @@
-package com.example.kotlin_retro_coroutine.data
+package com.example.mygames.games.data.model
 
 /**
  * Created by Prashant Rane on 04-03-2022.
  */
-data class ResultModel(
+data class Game(
     val _id: String,
     val author: String,
     val authorSlug: String,

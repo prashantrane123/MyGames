@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyGames">
+        android:theme="@style/Theme.MyGames"
+        android:name=".MyApplication">
         <activity
             android:name=".MainActivity"
             android:exported="true">

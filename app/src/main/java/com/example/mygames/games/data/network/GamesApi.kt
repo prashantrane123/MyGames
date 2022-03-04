@@ -1,6 +1,6 @@
 package com.example.mygames.games.data.network
 
-import com.example.mygames.games.data.model.QuoteList
+import com.example.mygames.games.data.model.GameList
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -10,5 +10,5 @@ import retrofit2.http.GET
 interface GamesApi {
 
     @GET("/quotes")
-    suspend fun getQuotes(): Response<QuoteList>
+    suspend fun getQuotes(): Response<GameList>
 }

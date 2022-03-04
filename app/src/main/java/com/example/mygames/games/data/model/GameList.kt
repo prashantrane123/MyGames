@@ -1,15 +1,15 @@
 package com.example.mygames.games.data.model
 
-import com.example.kotlin_retro_coroutine.data.ResultModel
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by Prashant Rane on 04-03-2022.
  */
-data class QuoteList(
+data class GameList(
     val count: Int,
     val lastItemIndex: Int,
     val page: Int,
-    val resultModels: List<ResultModel>,
+    @SerializedName("results")val games: List<Game>,
     val totalCount: Int,
     val totalPages: Int
 )

@@ -1,9 +1,8 @@
 package com.example.mygames.games.gamelist
 
+import android.util.Log
+import com.example.mygames.games.data.model.Game
 import com.example.mygames.games.data.network.GamesApi
-import com.example.mygames.games.domain.ResultModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -11,7 +10,7 @@ import javax.inject.Inject
  */
 class GameListRepository @Inject constructor(var gameApi: GamesApi) {
 
-    suspend fun getList(): Flow<List<ResultModel>> {
+/*    suspend fun getList(): Flow<List<ResultModel>> {
         return flow {
             val responseList = gameApi.getQuotes()
             if (responseList.isSuccessful) {
@@ -24,18 +23,21 @@ class GameListRepository @Inject constructor(var gameApi: GamesApi) {
                 throw Exception(responseList.errorBody().toString())
             }
         }
-    }
+    }*/
 
-    suspend fun getListFromNetwork(): List<ResultModel> {
+    suspend fun getGamesList(): List<Game>? {
         val responseList = gameApi.getQuotes()
         return if (responseList.isSuccessful) {
-            responseList.body()?.resultModels?.let {
-                (it.map {
+            Log.d("Prashant", responseList.body().toString())
+            responseList.body()?.games?.let {
+                /*(it.map {
                     ResultModel(_id = it._id, author = it.author)
-                })
-            } ?: throw Exception("No data")
+                })*/
+                Log.d("Prashant", it[0].author)
+                it
+            } ?: ArrayList()
         } else {
-            throw Exception(responseList.errorBody().toString())
+            ArrayList()
         }
     }
 

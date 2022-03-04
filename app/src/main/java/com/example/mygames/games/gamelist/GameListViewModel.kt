@@ -1,8 +1,22 @@
 package com.example.mygames.games.gamelist
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.mygames.games.data.model.Game
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GameListViewModel @Inject constructor(var repository: GameListRepository): ViewModel() {
+@HiltViewModel
+class GameListViewModel @Inject constructor(var repository: GameListRepository) : ViewModel() {
 
+
+    val gameListLiveData: MutableLiveData<List<Game>> = MutableLiveData()
+
+    fun getGameList() {
+        viewModelScope.launch {
+            gameListLiveData.value = repository.getGamesList()
+        }
+    }
 }
