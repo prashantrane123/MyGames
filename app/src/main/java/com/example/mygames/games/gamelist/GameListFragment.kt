@@ -8,37 +8,50 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.mygames.R
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mygames.databinding.GameListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GameListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = GameListFragment()
-    }
+    private lateinit var gamesRecyclerView: RecyclerView
+    private lateinit var adapter: GameListAdapter
+    lateinit var viewBinding: GameListFragmentBinding
 
     private lateinit var viewModel: GameListViewModel
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[GameListViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.game_list_fragment, container, false)
+    ): View {
+        viewBinding = GameListFragmentBinding.inflate(inflater)
+        return viewBinding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this)[GameListViewModel::class.java]
+        initViews()
+        initObservers()
+    }
+
+    private fun initViews() {
+        adapter = GameListAdapter()
+        gamesRecyclerView = viewBinding.listGames
+        gamesRecyclerView.layoutManager = GridLayoutManager(this.context, 2)
+        gamesRecyclerView.adapter = adapter
+    }
+
+    private fun initObservers() {
         viewModel.gameListLiveData.observe(viewLifecycleOwner, Observer { gameList ->
             if (gameList.isNotEmpty()) {
                 gameList.forEach { listItem -> Log.d("Prashant", listItem.external) }
+                adapter.setGameList(gameList)
             }
         })
         viewModel.getGameList()
     }
+
 }
