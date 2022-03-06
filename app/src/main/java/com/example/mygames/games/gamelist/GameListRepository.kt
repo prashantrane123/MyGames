@@ -26,16 +26,10 @@ class GameListRepository @Inject constructor(var gameApi: GamesApi) {
     }*/
 
     suspend fun getGamesList(): List<Game>? {
-        val responseList = gameApi.getQuotes()
+        val responseList = gameApi.getGamesList()
         return if (responseList.isSuccessful) {
-            Log.d("Prashant", responseList.body().toString())
-            responseList.body()?.games?.let {
-                /*(it.map {
-                    ResultModel(_id = it._id, author = it.author)
-                })*/
-                Log.d("Prashant", it[0].author)
-                it
-            } ?: ArrayList()
+            Log.d("Prashant", responseList.body()?.size.toString())
+            responseList.body() ?: ArrayList()
         } else {
             ArrayList()
         }

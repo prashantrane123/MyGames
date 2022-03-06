@@ -9,6 +9,6 @@ import retrofit2.http.GET
  */
 interface GamesApi {
 
-    @GET("/quotes")
-    suspend fun getQuotes(): Response<GameList>
+    @GET("api/1.0/games?title=batman&limit=60&exact=0")
+    suspend fun getGamesList(): Response<GameList>
 }

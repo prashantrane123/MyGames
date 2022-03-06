@@ -20,7 +20,7 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideGamesApiInstance():GamesApi {
-        return Retrofit.Builder().baseUrl("https://quotable.io/")
+        return Retrofit.Builder().baseUrl("https://www.cheapshark.com/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
             .create(GamesApi::class.java)

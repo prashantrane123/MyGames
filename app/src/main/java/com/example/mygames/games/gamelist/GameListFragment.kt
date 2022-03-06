@@ -36,7 +36,7 @@ class GameListFragment : Fragment() {
         super.onResume()
         viewModel.gameListLiveData.observe(viewLifecycleOwner, Observer { gameList ->
             if (gameList.isNotEmpty()) {
-                gameList.forEach { listItem -> Log.d("Prashant", listItem.author) }
+                gameList.forEach { listItem -> Log.d("Prashant", listItem.external) }
             }
         })
         viewModel.getGameList()
