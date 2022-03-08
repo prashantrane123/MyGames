@@ -10,21 +10,6 @@ import javax.inject.Inject
  */
 class GameListRepository @Inject constructor(var gameApi: GamesApi) {
 
-/*    suspend fun getList(): Flow<List<ResultModel>> {
-        return flow {
-            val responseList = gameApi.getQuotes()
-            if (responseList.isSuccessful) {
-                responseList.body()?.resultModels?.let {
-                    emit(it.map {
-                        ResultModel(_id = it._id, author = it.author)
-                    })
-                }
-            } else {
-                throw Exception(responseList.errorBody().toString())
-            }
-        }
-    }*/
-
     suspend fun getGamesList(): List<Game>? {
         val responseList = gameApi.getGamesList()
         return if (responseList.isSuccessful) {

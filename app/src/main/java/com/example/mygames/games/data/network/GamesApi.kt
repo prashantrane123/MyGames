@@ -9,6 +9,7 @@ import retrofit2.http.GET
  */
 interface GamesApi {
 
+    /*Query parameters can be used here */
     @GET("api/1.0/games?title=batman&limit=60&exact=0")
     suspend fun getGamesList(): Response<GameList>
 }

@@ -19,7 +19,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGamesApiInstance():GamesApi {
+    fun provideGamesApiInstance(): GamesApi {
         return Retrofit.Builder().baseUrl("https://www.cheapshark.com/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()

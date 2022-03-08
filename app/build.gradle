@@ -44,10 +44,6 @@ android {
 
 }
 
-tasks.withType(Test) {
-    useJUnitPlatform()
-}
-
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -79,7 +75,6 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.40"
     //Image library
     implementation "io.coil-kt:coil:2.0.0-rc01"
-
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
 
 }

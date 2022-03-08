@@ -20,5 +20,4 @@ class GameListViewModel @Inject constructor(var repository: GameListRepository) 
             gameListLiveData.postValue(repository.getGamesList())
         }
     }
-
 }
