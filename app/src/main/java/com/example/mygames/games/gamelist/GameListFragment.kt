@@ -35,6 +35,11 @@ class GameListFragment : Fragment() {
         viewModel = ViewModelProvider(this)[GameListViewModel::class.java]
         initViews()
         initObservers()
+        getGameList()
+    }
+
+    private fun getGameList() {
+        viewModel.getGameList()
     }
 
     private fun initViews() {
@@ -51,7 +56,6 @@ class GameListFragment : Fragment() {
                 adapter.setGameList(gameList)
             }
         })
-        viewModel.getGameList()
     }
 
 }

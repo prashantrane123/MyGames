@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mygames.games.data.model.Game
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +16,9 @@ class GameListViewModel @Inject constructor(var repository: GameListRepository) 
     val gameListLiveData: MutableLiveData<List<Game>> = MutableLiveData()
 
     fun getGameList() {
-        viewModelScope.launch {
-            gameListLiveData.value = repository.getGamesList()
+        viewModelScope.launch(Dispatchers.IO) {
+            gameListLiveData.postValue(repository.getGamesList())
         }
     }
+
 }
