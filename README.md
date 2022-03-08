@@ -23,4 +23,7 @@
 # Unit testing, with new latest coroutine test library 1.6.0 tests are failing,
   this needs little investigation
 # UI tests can be added. I have very little knowledge about UI testing
+# Project is small, but for larger scale we can define the BUILD types and Flavours if needed
+  with different configurations
+# We can define themes or styles or view dimensions etc... for larger scale project
 
