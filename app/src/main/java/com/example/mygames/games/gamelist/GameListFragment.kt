@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mygames.databinding.GameListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class GameListFragment : Fragment() {
 
+    private val TAG = GameListFragment::class.qualifiedName
     private lateinit var gamesRecyclerView: RecyclerView
     private lateinit var adapter: GameListAdapter
     lateinit var viewBinding: GameListFragmentBinding
@@ -50,12 +52,12 @@ class GameListFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.gameListLiveData.observe(viewLifecycleOwner, Observer { gameList ->
+        viewModel.gameListLiveData.observe(viewLifecycleOwner) { gameList ->
             if (gameList.isNotEmpty()) {
-                gameList.forEach { listItem -> Log.d("Prashant", listItem.external) }
+                gameList.forEach { listItem -> Log.d(TAG, listItem.external) }
                 adapter.setGameList(gameList)
             }
-        })
+        }
     }
 
 }

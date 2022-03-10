@@ -34,7 +34,6 @@ class GameListAdapter() : RecyclerView.Adapter<GameListAdapter.GameItemViewHolde
         holder.gameNameTxt.text = game.external
     }
 
-    // Total number of cells
     override fun getItemCount(): Int {
         return gameList.size
     }
@@ -45,7 +44,6 @@ class GameListAdapter() : RecyclerView.Adapter<GameListAdapter.GameItemViewHolde
         notifyDataSetChanged()//can be better not to use this
     }
 
-    // Stores and recycles views as they are scrolled off screen
     inner class GameItemViewHolder(var itemImageBinding: ItemGameBinding) :
         RecyclerView.ViewHolder(
             itemImageBinding.root

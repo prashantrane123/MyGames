@@ -12,7 +12,6 @@ class GameListRepository @Inject constructor(var gameApi: GamesApi) {
     suspend fun getGamesList(): List<Game>? {
         val responseList = gameApi.getGamesList()
         return if (responseList.isSuccessful) {
-            // Log.d("Prashant", responseList.body()?.size.toString())
             responseList.body() ?: ArrayList()
         } else {
             ArrayList()
