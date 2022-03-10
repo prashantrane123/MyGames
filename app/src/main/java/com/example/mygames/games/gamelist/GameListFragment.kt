@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mygames.databinding.GameListFragmentBinding
+import com.example.mygames.databinding.FragmentGameListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -20,7 +20,7 @@ class GameListFragment : Fragment() {
     private val TAG = GameListFragment::class.qualifiedName
     private lateinit var gamesRecyclerView: RecyclerView
     private lateinit var adapter: GameListAdapter
-    lateinit var viewBinding: GameListFragmentBinding
+    lateinit var viewBinding: FragmentGameListBinding
 
     private lateinit var viewModel: GameListViewModel
 
@@ -28,7 +28,7 @@ class GameListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = GameListFragmentBinding.inflate(inflater)
+        viewBinding = FragmentGameListBinding.inflate(inflater)
         return viewBinding.root
     }
 
