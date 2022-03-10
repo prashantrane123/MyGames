@@ -2,12 +2,14 @@ package com.example.mygames.gamelist
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.example.mygames.MainActivity
 import com.example.mygames.R
+import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,5 +27,22 @@ class GameListFragmentTest {
     @Test
     fun test_list_visible() {
         Espresso.onView(withId(R.id.list_games)).check(ViewAssertions.matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_title_my_games() {
+        val textView = Espresso.onView(
+            Matchers.allOf(
+                ViewMatchers.withText("MyGames"),
+                ViewMatchers.withParent(
+                    Matchers.allOf(
+                        withId(androidx.appcompat.R.id.action_bar),
+                        ViewMatchers.withParent(withId(androidx.appcompat.R.id.action_bar_container))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView.check(ViewAssertions.matches(ViewMatchers.withText("MyGames")))
     }
 }

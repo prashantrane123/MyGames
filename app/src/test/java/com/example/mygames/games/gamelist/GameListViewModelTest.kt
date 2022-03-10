@@ -3,8 +3,7 @@ package com.example.mygames.games.gamelist
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.mygames.games.data.model.Game
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -17,29 +16,28 @@ import org.mockito.kotlin.whenever
 /**
  * Created by Prashant Rane on 06-03-2022.
  */
-@ExperimentalCoroutinesApi
 class GameListViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
-
     private lateinit var viewModel: GameListViewModel
 
-    val gameListRepoMock: GameListRepository = mock()
+    private val gameListRepoMock: GameListRepository = mock()
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
+        Dispatchers.setMain(mainThreadSurrogate)
+        viewModel = GameListViewModel(gameListRepoMock)
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        Dispatchers.resetMain() // reset the main dispatcher to the original Main dispatcher
+        mainThreadSurrogate.close()
     }
 
     private fun getMockedGameList(): List<Game> {
@@ -60,26 +58,19 @@ class GameListViewModelTest {
         return list
     }
 
-    @ExperimentalCoroutinesApi
     @Test
-    fun testRepositoryReturnsResult() = runTest(TestCoroutineDispatcher()) {
-        viewModel = GameListViewModel(gameListRepoMock)
-        val mockObserver: Observer<List<Game>> = mock()
-        viewModel.gameListLiveData.observeForever(mockObserver)
+    fun testRepositoryResult() = runBlocking {
 
-        whenever(gameListRepoMock.getGamesList()).thenReturn(getMockedGameList())
+            val mockObserver: Observer<List<Game>> = mock()
+            viewModel.gameListLiveData.observeForever(mockObserver)
 
-        viewModel.getGameList()
+            whenever(gameListRepoMock.getGamesList()).thenReturn(getMockedGameList())
 
+            viewModel.getGameList()
+            delay(5000)
 
-        Assert.assertTrue(viewModel.gameListLiveData.value?.size == 20)
+            Assert.assertTrue(viewModel.gameListLiveData.value?.size == 20)
+
     }
 }
 
-/* @Test
- fun testing()= runBlocking {
-    *//* var gameListMock: List<Game> = getMockedGameList()
-        assert(gameListMock.size == 20)*//*
-         viewModel.getGameList()
-        verify(viewModel.gameListLiveData.value?.size == 20)
-    }*/

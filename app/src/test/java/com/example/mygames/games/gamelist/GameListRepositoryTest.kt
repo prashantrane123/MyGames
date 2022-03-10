@@ -1,17 +1,18 @@
 package com.example.mygames.games.gamelist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.mygames.games.data.network.GamesApi
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -22,30 +23,68 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GameListRepositoryTest {
 
+
+    lateinit var service: GamesApi
     private lateinit var repository: GameListRepository
 
     private var gameApiMock: GamesApi = mock()
+    private val mockWebServer = MockWebServer()
+    lateinit var retrofit: Retrofit
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+
 
     @Before
     fun beforeTests() {
+        Dispatchers.setMain(mainThreadSurrogate)
         repository = GameListRepository(gameApiMock)
+
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain() // reset the main dispatcher to the original Main dispatcher
+        mainThreadSurrogate.close()
+        mockWebServer.shutdown()
     }
 
     @Test
-    fun `getGameApi`()= runBlockingTest  {
-        val server = MockWebServer()
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(server.url("https://www.cheapshark.com/"))
+    fun `test_game_api_response`() = runBlocking {
+
+        mockResponseWithDummyServer()
+
+        val size = service.getGamesList().body()?.size
+
+        delay(5000)
+        Assert.assertTrue(size == 4)
+    }
+
+    private fun mockResponseWithDummyServer() {
+        mockWebServer.enqueue(MockResponse().setBody(getResponseBody()))
+
+        mockWebServer.start(8080)
+
+        retrofit = Retrofit.Builder()
+            .baseUrl(mockWebServer.url("/v1/test/"))
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-        val service: GamesApi = retrofit.create(GamesApi::class.java)
-        server.enqueue(MockResponse().setBody(getResponseBody()))
-        server.start()
-
-        Assert.assertTrue(service.getGamesList().body()?.size==4)
-
-        repository.getGamesList()
+        service = retrofit.create(GamesApi::class.java)
     }
+
+    @Test
+    fun `test_repository_returns_list`() = runBlocking {
+
+        mockResponseWithDummyServer()
+
+        whenever(gameApiMock.getGamesList()).thenReturn(service.getGamesList())
+
+        val gameListToTest = repository.getGamesList()
+
+        delay(5000)
+        Assert.assertTrue(gameListToTest?.size == 4)
+    }
+
 
     private fun getResponseBody(): String {
         return "[\n" +

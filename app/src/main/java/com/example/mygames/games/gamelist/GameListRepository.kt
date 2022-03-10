@@ -1,6 +1,5 @@
 package com.example.mygames.games.gamelist
 
-import android.util.Log
 import com.example.mygames.games.data.model.Game
 import com.example.mygames.games.data.network.GamesApi
 import javax.inject.Inject
@@ -13,7 +12,7 @@ class GameListRepository @Inject constructor(var gameApi: GamesApi) {
     suspend fun getGamesList(): List<Game>? {
         val responseList = gameApi.getGamesList()
         return if (responseList.isSuccessful) {
-            Log.d("Prashant", responseList.body()?.size.toString())
+            // Log.d("Prashant", responseList.body()?.size.toString())
             responseList.body() ?: ArrayList()
         } else {
             ArrayList()
